@@ -46,7 +46,7 @@ header {
   border-bottom: 3px solid transparent; font-size: 17px;
 }
 .tabs button[aria-selected="true"] { color: #fff; border-bottom-color: #e0aa3e; font-weight: 600; }
-main { max-width: 680px; margin: 0 auto; padding: 12px 16px 48px; }
+main { max-width: 680px; margin: 0 auto; padding: 12px 16px 24px; }
 .place {
   display: flex; align-items: center; gap: 6px; font-size: 15px; color: var(--muted); margin: 2px 0 12px;
 }
@@ -118,6 +118,11 @@ dialog h4 { margin: 14px 0 6px; font-size: 14px; color: var(--muted); font-weigh
 .cities button.on { border-color: var(--gold); background: var(--gold-soft); font-weight: 600; }
 .geo { width: 100%; margin-top: 10px; }
 .close { width: 100%; margin-top: 14px; }
+.site-foot {
+  max-width: 680px; margin: 0 auto; padding: 0 16px calc(28px + env(safe-area-inset-bottom));
+  color: var(--muted); font-size: 15px; text-align: center;
+}
+.site-foot a { color: var(--gold); }
 </style>
 </head>
 <body>
@@ -132,6 +137,10 @@ dialog h4 { margin: 14px 0 6px; font-size: 14px; color: var(--muted); font-weigh
   <div class="place">📍 <span id="place-name"></span> · <button id="place-btn">сменить место</button></div>
   <section id="view"></section>
 </main>
+<footer class="site-foot">
+  Источники: <a href="https://t.me/hosmo_info" target="_blank" rel="noopener">Telegram-канал Александра Хосмо</a>
+  · <a href="https://tibetastromed.ru/" target="_blank" rel="noopener">сайт tibetastromed.ru</a>
+</footer>
 
 <dialog id="place-dlg">
   <div class="in">
