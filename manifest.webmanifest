@@ -1,0 +1,16 @@
+{
+  "name": "Тибетский календарь",
+  "short_name": "Календарь",
+  "description": "Рекомендации на каждый день и таблицы мытья волос и бритья по методу Хосмо",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1d2b4f",
+  "theme_color": "#1d2b4f",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
+  ]
+}

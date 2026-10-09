@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Тибетский календарь</title>
+<meta name="description" content="Рекомендации на каждый день и таблицы мытья волос и бритья по методу Хосмо">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1d2b4f">
+<meta name="apple-mobile-web-app-title" content="Календарь">
+<style>
+:root {
+  --bg: #f6f3ec; --card: #fffdf8; --text: #23211c; --muted: #6f6a5f; --line: #e4ddcd;
+  --navy: #1d2b4f; --gold: #a8741a; --gold-soft: #f3e6c8;
+  --good: #2e7d4f; --good-bg: #e3f2e8; --bad: #b3362d; --bad-bg: #f8e3e0;
+  --poison-bg: #f8e9e6; --nectar-bg: #e8f3ea;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171c; --card: #1e2128; --text: #ebe7de; --muted: #a39d90; --line: #30343d;
+    --navy: #1d2b4f; --gold: #e0aa3e; --gold-soft: #3a3120;
+    --good: #6cc48f; --good-bg: #1d3326; --bad: #ef7d72; --bad-bg: #3d2220;
+    --poison-bg: #33211f; --nectar-bg: #1c3024;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 18px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+button, input, select { font: inherit; color: inherit; }
+header {
+  background: var(--navy); color: #f4ead2;
+  padding: calc(10px + env(safe-area-inset-top)) 16px 0;
+}
+.bar { max-width: 680px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+.bar img { width: 32px; height: 32px; border-radius: 7px; }
+.bar h1 { font-size: 20px; font-weight: 600; margin: 0; flex: 1; }
+.tabs { max-width: 680px; margin: 8px auto 0; display: flex; }
+.tabs button {
+  flex: 1; background: none; border: 0; padding: 10px 0 12px; color: #c9bfa6; cursor: pointer;
+  border-bottom: 3px solid transparent; font-size: 17px;
+}
+.tabs button[aria-selected="true"] { color: #fff; border-bottom-color: #e0aa3e; font-weight: 600; }
+main { max-width: 680px; margin: 0 auto; padding: 12px 16px 48px; }
+.place {
+  display: flex; align-items: center; gap: 6px; font-size: 15px; color: var(--muted); margin: 2px 0 12px;
+}
+.place button { background: none; border: 0; padding: 4px 0; color: var(--gold); text-decoration: underline; cursor: pointer; }
+.hint { color: var(--bad); }
+.nav { display: flex; align-items: center; gap: 8px; }
+.nav .arrow {
+  width: 48px; height: 48px; flex: none; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--card); font-size: 26px; line-height: 1; cursor: pointer;
+}
+.nav .title { flex: 1; text-align: center; font-size: 20px; font-weight: 600; line-height: 1.25; }
+.nav .title small { display: block; font-size: 15px; font-weight: 400; color: var(--muted); }
+.quick { display: flex; gap: 8px; margin: 10px 0 14px; }
+.quick button, .quick label {
+  flex: 1; min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--card);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; font-size: 16px;
+}
+.quick button.on { border-color: var(--gold); background: var(--gold-soft); font-weight: 600; }
+.quick input[type="date"] { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 4px 18px; }
+.block { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.block:last-child { border-bottom: 0; }
+.block p { margin: 0 0 8px; }
+.block p:last-child { margin-bottom: 0; }
+.head .first { font-size: 15px; color: var(--muted); }
+.head .rest { font-weight: 600; }
+.label { font-size: 22px; font-weight: 700; color: var(--gold); letter-spacing: .02em; }
+.colors .row { display: flex; align-items: center; gap: 10px; margin: 4px 0; }
+.dots { display: inline-flex; gap: 4px; width: 50px; flex: none; }
+.dot { width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .25); }
+.colors b { font-weight: 600; }
+.syl b { color: var(--gold); letter-spacing: .03em; }
+.mark {
+  display: inline-block; min-width: 28px; padding: 0 6px; border-radius: 8px; text-align: center; font-weight: 700;
+}
+.mark.ok { color: var(--good); background: var(--good-bg); }
+.mark.no { color: var(--bad); background: var(--bad-bg); }
+.periods { border-radius: 12px; padding: 12px 14px; margin: 4px 0; }
+.periods.poison { background: var(--poison-bg); }
+.periods.nectar { background: var(--nectar-bg); }
+.periods h3 { margin: 0 0 6px; font-size: 17px; }
+.periods ul { margin: 0 0 8px; padding: 0; list-style: none; }
+.periods li { margin: 4px 0; }
+.periods li b { font-size: 19px; font-variant-numeric: tabular-nums; }
+.periods li span, .periods .tail, .muted { color: var(--muted); font-size: 15px; }
+.foot { color: var(--muted); font-size: 14px; }
+.empty { text-align: center; color: var(--muted); padding: 40px 0; }
+h2 { font-size: 18px; margin: 18px 0 8px; }
+table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 16px; }
+tr:last-child td { border-bottom: 0; }
+tr { cursor: pointer; }
+tr.today td { background: var(--gold-soft); }
+td.d { width: 46px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+td.d small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+td.m { width: 40px; }
+dialog {
+  border: 0; border-radius: 16px; padding: 0; width: min(420px, calc(100vw - 32px)); max-height: 80vh;
+  background: var(--card); color: var(--text);
+}
+dialog::backdrop { background: rgba(0, 0, 0, .45); }
+dialog .in { padding: 16px; }
+dialog h3 { margin: 0 0 4px; }
+dialog h4 { margin: 14px 0 6px; font-size: 14px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; }
+.cities { display: flex; flex-wrap: wrap; gap: 6px; }
+.cities button, .geo, .close {
+  border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 8px 12px; cursor: pointer; font-size: 16px;
+}
+.cities button.on { border-color: var(--gold); background: var(--gold-soft); font-weight: 600; }
+.geo { width: 100%; margin-top: 10px; }
+.close { width: 100%; margin-top: 14px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar"><img src="icon.svg" alt=""><h1>Тибетский календарь</h1></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tab-day" aria-selected="true">День</button>
+    <button role="tab" id="tab-month" aria-selected="false">Мытьё и бритьё</button>
+  </div>
+</header>
+<main>
+  <div class="place">📍 <span id="place-name"></span> · <button id="place-btn">сменить место</button></div>
+  <section id="view"></section>
+</main>
+
+<dialog id="place-dlg">
+  <div class="in">
+    <h3>Где вы находитесь?</h3>
+    <div class="muted">От места зависит время яда и нектара — оно считается по рассвету и сумеркам.</div>
+    <button class="geo" id="geo-btn">📍 Определить по телефону</button>
+    <div id="geo-msg" class="muted"></div>
+    <div id="city-list"></div>
+    <button class="close" id="dlg-close">Готово</button>
+  </div>
+</dialog>
+
+<script src="hours.js"></script>
+<script>
+'use strict';
+const CITIES = [
+  ['Россия', [
+    ['Москва', 'Москвы', 55.756, 37.617, 'Europe/Moscow'],
+    ['Санкт-Петербург', 'Санкт-Петербурга', 59.939, 30.316, 'Europe/Moscow'],
+    ['Калининград', 'Калининграда', 54.710, 20.511, 'Europe/Kaliningrad'],
+    ['Элиста', 'Элисты', 46.308, 44.256, 'Europe/Moscow'],
+    ['Самара', 'Самары', 53.195, 50.100, 'Europe/Samara'],
+    ['Екатеринбург', 'Екатеринбурга', 56.838, 60.605, 'Asia/Yekaterinburg'],
+    ['Омск', 'Омска', 54.989, 73.369, 'Asia/Omsk'],
+    ['Новосибирск', 'Новосибирска', 55.030, 82.920, 'Asia/Novosibirsk'],
+    ['Горно-Алтайск', 'Горно-Алтайска', 51.958, 85.960, 'Asia/Barnaul'],
+    ['Красноярск', 'Красноярска', 56.010, 92.852, 'Asia/Krasnoyarsk'],
+    ['Кызыл', 'Кызыла', 51.719, 94.438, 'Asia/Krasnoyarsk'],
+    ['Иркутск', 'Иркутска', 52.287, 104.281, 'Asia/Irkutsk'],
+    ['Улан-Удэ', 'Улан-Удэ', 51.834, 107.584, 'Asia/Irkutsk'],
+    ['Владивосток', 'Владивостока', 43.116, 131.882, 'Asia/Vladivostok'],
+  ]],
+  ['Другие страны', [
+    ['Минск', 'Минска', 53.902, 27.562, 'Europe/Minsk'],
+    ['Ереван', 'Еревана', 40.179, 44.499, 'Asia/Yerevan'],
+    ['Тбилиси', 'Тбилиси', 41.716, 44.783, 'Asia/Tbilisi'],
+    ['Алматы', 'Алматы', 43.238, 76.946, 'Asia/Almaty'],
+    ['Берлин', 'Берлина', 52.520, 13.405, 'Europe/Berlin'],
+    ['Лондон', 'Лондона', 51.507, -0.128, 'Europe/London'],
+    ['Нью-Йорк', 'Нью-Йорка', 40.713, -74.006, 'America/New_York'],
+    ['Катманду', 'Катманду', 27.717, 85.324, 'Asia/Kathmandu'],
+    ['Лхаса', 'Лхасы', 29.652, 91.172, 'Asia/Shanghai'],
+  ]],
+].map(([group, list]) => [group, list.map(([name, gen, lat, lon, zone]) => ({ name, gen, lat, lon, zone, depression: 6 }))]);
+const ALL_CITIES = CITIES.flatMap(([, l]) => l);
+const MOSCOW = ALL_CITIES[0];
+
+const MONTHS_GEN = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const MONTHS_NOM = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+const WEEKDAYS = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+const WD_SHORT = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+const COLOR_DOTS = {
+  'зеленый': ['#2f9e44'], 'красный': ['#d6342b'], 'желтый': ['#f2c12e'], 'белый': ['#ffffff'],
+  'синий/черный': ['#1f5fbf', '#111111'],
+};
+
+// ---------------------------------------------------------------- хранение (может не работать)
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* приватный режим */ } },
+};
+
+// ---------------------------------------------------------------- место
+let placeGuessed = false;
+function initialPlace() {
+  const saved = store.get('place');
+  if (saved && typeof saved.lat === 'number') return saved;
+  let zone = '';
+  try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { /* старый браузер */ }
+  const same = ALL_CITIES.find(c => c.zone === zone);
+  if (same) return same;
+  placeGuessed = true;
+  return MOSCOW;
+}
+let place = initialPlace();
+
+function setPlace(p) {
+  place = p; placeGuessed = false; store.set('place', p);
+  render();
+}
+
+// ---------------------------------------------------------------- даты
+const iso = (y, m, d) => `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+const parse = s => s.split('-').map(Number);
+function addDays(s, n) {
+  const [y, m, d] = parse(s);
+  const t = new Date(Date.UTC(y, m - 1, d + n));
+  return iso(t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate());
+}
+function todayAt(zone) {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: zone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  } catch (e) {
+    const t = new Date();
+    return iso(t.getFullYear(), t.getMonth() + 1, t.getDate());
+  }
+}
+const weekday = s => { const [y, m, d] = parse(s); return new Date(Date.UTC(y, m - 1, d)).getUTCDay(); };
+
+// ---------------------------------------------------------------- данные
+let READY = null;
+const cache = {};
+async function loadIndex() {
+  const r = await fetch('data/index.json', { cache: 'no-cache' });
+  READY = new Set((await r.json()).months);
+}
+async function loadMonth(ym) {
+  if (!READY.has(ym)) return null;
+  if (!cache[ym]) cache[ym] = fetch(`data/${ym}.json`).then(r => r.json());
+  return cache[ym];
+}
+
+// ---------------------------------------------------------------- маршрут: #2026-10-09 — день, #2026-10 — месяц
+function route() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  let m;
+  if ((m = h.match(/^(\d{4}-\d{2})$/))) return { view: 'month', ym: m[1] };
+  if ((m = h.match(/^(\d{4}-\d{2}-\d{2})$/))) return { view: 'day', date: m[1] };
+  return { view: 'day', date: todayAt(place.zone) };
+}
+const go = hash => { if (location.hash !== '#' + hash) location.hash = hash; else render(); };
+
+// ---------------------------------------------------------------- отрисовка
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const paras = text => text.split('\n').map(l => `<p>${esc(l)}</p>`).join('');
+const markHtml = ok => `<span class="mark ${ok ? 'ok' : 'no'}">${ok ? '✓' : '✗'}</span>`;
+
+function halfTitle(name) {
+  const [animal, half] = name.split('-');
+  return `${half === '1' ? 'первая' : 'вторая'} половина часа ${animal}`;
+}
+
+function periodsHtml(b, date) {
+  const [y, m, d] = parse(date);
+  const hh = Hours.halfHours(y, m, d, place);
+  const poison = b.kind === 'poison';
+  const items = b.halves.map(([name, ha, hb]) => {
+    const [a, z] = hh[name];
+    return `<li><b>с ${Hours.hhmm(a)} до ${Hours.hhmm(z)}</b> <span>(${halfTitle(name)}; у Хосмо ${ha}–${hb})</span></li>`;
+  }).join('');
+  return `<div class="periods ${b.kind}">
+    <h3>${poison ? 'Неблагоприятные' : 'Благоприятные'} периоды (для ${esc(place.gen)}) времени суток:</h3>
+    <ul>${items}</ul><div class="tail">${esc(b.tail)}</div></div>`;
+}
+
+function colorRow(title, value) {
+  const dots = (COLOR_DOTS[value] || []).map(c => `<span class="dot" style="background:${c}"></span>`).join('');
+  return `<div class="row"><span class="dots">${dots}</span><span>Цвет ${title} – <b>${esc(value)}</b></span></div>`;
+}
+
+function blockHtml(b, date) {
+  switch (b.kind) {
+    case 'header': {
+      const [first, ...rest] = b.text.split('\n');
+      return `<div class="block head"><p class="first">${esc(first)}</p><div class="rest">${paras(rest.join('\n'))}</div></div>`;
+    }
+    case 'label': return `<div class="block label">${esc(b.text)}</div>`;
+    case 'colors':
+      return `<div class="block colors">${colorRow('УДАЧИ', b.luck)}${colorRow('ЗДОРОВЬЯ', b.health)}${colorRow('БОГАТСТВА', b.wealth)}</div>`;
+    case 'syllables':
+      return `<div class="block syl"><p>Слоги УДАЧИ: <b>${esc(b.syllables)}</b>${esc(b.text.slice(b.text.indexOf(b.syllables) + b.syllables.length))}</p></div>`;
+    case 'shave': case 'hair':
+      return `<div class="block"><p>${esc(b.text.slice(0, -2))} ${markHtml(b.ok)}</p></div>`;
+    case 'years':
+      return `<div class="block">${paras(b.text)}</div>`;
+    case 'poison': case 'nectar':
+      return `<div class="block">${periodsHtml(b, date)}</div>`;
+    case 'footer':
+      return `<div class="block foot">${esc(b.text)}</div>`;
+    default:
+      return `<div class="block">${paras(b.text)}</div>`;
+  }
+}
+
+function placeLine() {
+  document.getElementById('place-name').innerHTML = placeGuessed
+    ? `${esc(place.name)} <span class="hint">— выберите своё место</span>` : esc(place.name);
+}
+
+async function renderDay(date) {
+  const [y, m, d] = parse(date);
+  const today = todayAt(place.zone), tomorrow = addDays(today, 1);
+  const first = [...READY].sort()[0], last = [...READY].sort().pop();
+  const [ly, lm] = parse(last), lastDom = new Date(Date.UTC(ly, lm, 0)).getUTCDate();
+  const view = document.getElementById('view');
+  view.innerHTML = `
+    <div class="nav">
+      <button class="arrow" id="prev" aria-label="Предыдущий день">‹</button>
+      <div class="title">${d} ${MONTHS_GEN[m - 1]} ${y}<small>${WEEKDAYS[weekday(date)]}</small></div>
+      <button class="arrow" id="next" aria-label="Следующий день">›</button>
+    </div>
+    <div class="quick">
+      <button id="q-today" class="${date === today ? 'on' : ''}">Сегодня</button>
+      <button id="q-tomorrow" class="${date === tomorrow ? 'on' : ''}">Завтра</button>
+      <label>📅 Дата<input type="date" id="pick" value="${date}" min="${first}-01" max="${last}-${lastDom}"></label>
+    </div>
+    <div id="post"><div class="empty">Загрузка…</div></div>`;
+  document.getElementById('prev').onclick = () => go(addDays(date, -1));
+  document.getElementById('next').onclick = () => go(addDays(date, 1));
+  document.getElementById('q-today').onclick = () => go(today);
+  document.getElementById('q-tomorrow').onclick = () => go(tomorrow);
+  document.getElementById('pick').onchange = e => { if (e.target.value) go(e.target.value); };
+
+  const data = await loadMonth(iso(y, m, 1).slice(0, 7));
+  const post = document.getElementById('post');
+  if (!post) return;
+  const blocks = data && data.days[String(d)];
+  post.innerHTML = blocks
+    ? `<div class="card">${blocks.map(b => blockHtml(b, date)).join('')}</div>`
+    : `<div class="empty">Прогноз на эту дату ещё не готов.<br>Готовые месяцы: с 01.${first.split('-').reverse().join('.')} по ${lastDom}.${last.split('-').reverse().join('.')}.</div>`;
+}
+
+async function renderMonth(ym) {
+  const [y, m] = parse(ym);
+  const prev = m === 1 ? iso(y - 1, 12, 1) : iso(y, m - 1, 1), next = m === 12 ? iso(y + 1, 1, 1) : iso(y, m + 1, 1);
+  const today = todayAt(place.zone);
+  const view = document.getElementById('view');
+  view.innerHTML = `
+    <div class="nav">
+      <button class="arrow" id="prev" aria-label="Предыдущий месяц">‹</button>
+      <div class="title">${MONTHS_NOM[m - 1]} ${y}</div>
+      <button class="arrow" id="next" aria-label="Следующий месяц">›</button>
+    </div>
+    <div id="tables"><div class="empty">Загрузка…</div></div>`;
+  document.getElementById('prev').onclick = () => go(prev.slice(0, 7));
+  document.getElementById('next').onclick = () => go(next.slice(0, 7));
+
+  const data = await loadMonth(ym);
+  const box = document.getElementById('tables');
+  if (!box) return;
+  if (!data) { box.innerHTML = '<div class="empty">Таблица на этот месяц ещё не готова.</div>'; return; }
+  const table = (key) => `<table>${data.table.map(r => {
+    const date = iso(y, m, r.day);
+    return `<tr data-date="${date}" class="${date === today ? 'today' : ''}">
+      <td class="d">${r.day}<small>${WD_SHORT[weekday(date)]}</small></td>
+      <td class="m">${markHtml(r[key + '_ok'])}</td>
+      <td>${esc(r[key])} <span class="muted">(${r.ld}-й лунный день)</span></td></tr>`;
+  }).join('')}</table>`;
+  const month = MONTHS_NOM[m - 1].toLowerCase();
+  box.innerHTML = `
+    <h2>Мытьё волос — ${month} ${y} <span class="muted">(«Зеркало Бытия», Бон)</span></h2>${table('hair')}
+    <h2>Стрижка и бритьё — ${month} ${y} <span class="muted">(«Ребконг»)</span></h2>${table('shave')}
+    <p class="foot">✓/✗ — благоприятно/неблагоприятно по таблицам Хосмо. Нажмите на день, чтобы открыть рекомендации.</p>`;
+  box.querySelectorAll('tr').forEach(tr => { tr.onclick = () => go(tr.dataset.date); });
+}
+
+let lastDay = null;
+async function render() {
+  placeLine();
+  if (!READY) {
+    try { await loadIndex(); } catch (e) {
+      document.getElementById('view').innerHTML = '<div class="empty">Не удалось загрузить календарь. Проверьте интернет и обновите страницу.</div>';
+      return;
+    }
+  }
+  const r = route();
+  document.getElementById('tab-day').setAttribute('aria-selected', r.view === 'day');
+  document.getElementById('tab-month').setAttribute('aria-selected', r.view === 'month');
+  if (r.view === 'day') { lastDay = r.date; await renderDay(r.date); } else await renderMonth(r.ym);
+}
+
+document.getElementById('tab-day').onclick = () => go(lastDay || todayAt(place.zone));
+document.getElementById('tab-month').onclick = () => go((lastDay || todayAt(place.zone)).slice(0, 7));
+window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
+
+// ---------------------------------------------------------------- выбор места
+const dlg = document.getElementById('place-dlg');
+function fillCities() {
+  document.getElementById('city-list').innerHTML = CITIES.map(([group, list]) =>
+    `<h4>${group}</h4><div class="cities">${list.map(c =>
+      `<button data-name="${esc(c.name)}" class="${c.name === place.name ? 'on' : ''}">${esc(c.name)}</button>`).join('')}</div>`).join('');
+  document.querySelectorAll('#city-list button').forEach(b => {
+    b.onclick = () => { setPlace(ALL_CITIES.find(c => c.name === b.dataset.name)); dlg.close(); };
+  });
+}
+document.getElementById('place-btn').onclick = () => {
+  fillCities(); document.getElementById('geo-msg').textContent = '';
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+};
+document.getElementById('dlg-close').onclick = () => dlg.close();
+dlg.onclick = e => { if (e.target === dlg) dlg.close(); };  // нажатие на затемнение вокруг
+document.getElementById('geo-btn').onclick = () => {
+  const msg = document.getElementById('geo-msg');
+  if (!navigator.geolocation) { msg.textContent = 'Телефон не даёт определить место — выберите город из списка.'; return; }
+  msg.textContent = 'Определяю…';
+  navigator.geolocation.getCurrentPosition(pos => {
+    let zone = MOSCOW.zone;
+    try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || zone; } catch (e) { /* старый браузер */ }
+    setPlace({ name: 'Моё место', gen: 'моего места', lat: +pos.coords.latitude.toFixed(3),
+               lon: +pos.coords.longitude.toFixed(3), zone, depression: 6 });
+    dlg.close();
+  }, () => { msg.textContent = 'Не получилось определить место — выберите город из списка.'; },
+  { timeout: 15000, maximumAge: 86400000 });
+};
+
+render();
+</script>
+</body>
+</html>
